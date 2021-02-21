@@ -4,6 +4,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern C {
+#endif
+
 #include <stdbool.h>
 #include <sys/types.h>
 
@@ -92,3 +96,7 @@ ssize_t ReceiveConfig(int fd, ConfigData *data);
 ssize_t ReceivePointerEvent(int fd, PointerEvent *ev);
 ssize_t ReceiveWindowEvent(int fd, WindowEvent *ev);
 ssize_t ReceiveEventType(int fd, enum EventType *eventType);
+
+#ifdef __cplusplus
+}
+#endif

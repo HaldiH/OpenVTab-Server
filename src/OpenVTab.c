@@ -2,7 +2,7 @@
 // Created by hugo1 on 19.02.2021.
 //
 
-#include "VTablet.h"
+#include "OpenVTab.h"
 #include <sys/socket.h>
 
 ssize_t ReceivePointerPointProperties(int fd, PointerPointProperties *properties) {

@@ -1,5 +1,7 @@
-#include "include/VTablet.h"
+#include "include/OpenVTab.h"
 #include <arpa/inet.h>
+#include <libevdev/libevdev-uinput.h>
+#include <libevdev/libevdev.h>
 #include <linux/uinput.h>
 #include <signal.h>
 #include <stdio.h>
@@ -7,6 +9,8 @@
 #include <unistd.h>
 
 int is_running = 1;
+struct libevdev *dev;
+struct libevdev_uinput *uidev;
 
 void handle_signal(int sig) {
     switch (sig) {
@@ -105,6 +109,21 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    dev = libevdev_new();
+    libevdev_set_name(dev, "test device");
+    libevdev_enable_event_type(dev, EV_REL);
+    libevdev_enable_event_code(dev, EV_REL, REL_X, NULL);
+    libevdev_enable_event_code(dev, EV_REL, REL_Y, NULL);
+    libevdev_enable_event_type(dev, EV_KEY);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_LEFT, NULL);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_MIDDLE, NULL);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_RIGHT, NULL);
+    int rc;
+    if ((rc = libevdev_uinput_create_from_device(dev, LIBEVDEV_UINPUT_OPEN_MANAGED, &uidev)) < 0) {
+        perror("Create uinput device");
+        return rc;
+    }
+
     printf("Server listening on port %i\n", port);
 
     while (is_running) {
@@ -122,6 +141,8 @@ int main(int argc, char *argv[]) {
         close(client_sock);
         printf("Client closed\n");
     }
+
+    libevdev_uinput_destroy(uidev);
 
     close(sock);
 
