@@ -72,50 +72,6 @@ ssize_t ReceivePointerEvent(int fd, PointerEvent *ev) {
     return total;
 }
 
-ssize_t ReceiveConfig(int fd, ConfigData *data) {
-    ssize_t rc;
-    ssize_t total = 0;
-    if ((rc = recv(fd, &(data->Width), sizeof(data->Width), 0)) < 0)
-        return -1;
-    total += rc;
-    if ((rc = recv(fd, &(data->Height), sizeof(data->Height), 0)) < 0)
-        return -1;
-    total += rc;
-    return total;
-}
-
-ssize_t ReceiveWindowEventType(int fd, enum WindowEventType *eventType) {
-    return recv(fd, eventType, 1, 0);
-}
-
-ssize_t ReceiveSize(int fd, Size *size) {
-    ssize_t rc;
-    ssize_t total = 0;
-    if ((rc = recv(fd, &(size->Width), sizeof(size->Width), 0)) < 0)
-        return -1;
-    total += rc;
-    if ((rc = recv(fd, &(size->Height), sizeof(size->Height), 0)) < 0)
-        return -1;
-    total += rc;
-    return total;
-}
-
-ssize_t ReceiveWindow(int fd, Window_t *window) {
-    return ReceiveSize(fd, &(window->size));
-}
-
-ssize_t ReceiveWindowEvent(int fd, WindowEvent *ev) {
-    ssize_t rc;
-    ssize_t total = 0;
-    if ((rc = ReceiveWindowEventType(fd, &(ev->type))) < 0)
-        return -1;
-    total += rc;
-    if ((rc = ReceiveWindow(fd, &(ev->window))) < 0)
-        return -1;
-    total += rc;
-    return total;
-}
-
 ssize_t ReceiveEventType(int fd, enum EventType *eventType) {
     return recv(fd, eventType, 1, 0);
 }

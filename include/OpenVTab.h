@@ -39,13 +39,8 @@ enum PointerEventType {
     PointerWheelChanged = 7,
 };
 
-enum WindowEventType {
-    WindowSizeChanged = 0
-};
-
 enum EventType {
-    Pointer = 0,
-    Window = 1
+    Pointer = 0
 };
 
 typedef struct {
@@ -73,28 +68,7 @@ typedef struct {
     PointerPoint ptrPt;
 } PointerEvent;
 
-typedef struct {
-    double Width;
-    double Height;
-} Size;
-
-typedef struct {
-    Size size;
-} Window_t;
-
-typedef struct {
-    enum WindowEventType type;
-    Window_t window;
-} WindowEvent;
-
-typedef struct {
-    double Width;
-    double Height;
-} ConfigData;
-
-ssize_t ReceiveConfig(int fd, ConfigData *data);
 ssize_t ReceivePointerEvent(int fd, PointerEvent *ev);
-ssize_t ReceiveWindowEvent(int fd, WindowEvent *ev);
 ssize_t ReceiveEventType(int fd, enum EventType *eventType);
 
 #ifdef __cplusplus
